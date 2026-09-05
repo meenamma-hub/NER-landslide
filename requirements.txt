@@ -1,0 +1,5 @@
+# Core data and machine-learning dependencies for the landslide risk project.
+pandas>=2.2
+numpy>=2.0
+scikit-learn>=1.6
+joblib>=1.4
