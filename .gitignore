@@ -1,5 +1,6 @@
 # Python virtual environment
 venv/
+.venv/
 
 # Python cache
 __pycache__/
@@ -9,14 +10,17 @@ __pycache__/
 
 # Environment variables
 .env
+.env.*
 
-# Local SQLite database
-landslide.db
+# SQLite database
+*.db
+*.sqlite
+*.sqlite3
 
 # VS Code
 .vscode/
 
-# Python test/cache
+# Pytest
 .pytest_cache/
 
 # Logs
