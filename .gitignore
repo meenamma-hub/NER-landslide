@@ -1,7 +1,8 @@
-# Local Python environment and generated Python files
-.venv/
+# Python
 __pycache__/
 *.py[cod]
+*.pyo
+
 
 # Tooling caches
 .pytest_cache/
@@ -15,3 +16,24 @@ data/raw/imerg/
 
 # Soil moisture data
 data/raw/soil_moisture/
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Raw downloaded data
+data/raw/dem/*.tif
+data/raw/imerg/
+data/raw/soil_moisture/
+
+# Temporary/test data
+data/raw/glads_test/
+data/processed/imerg/imetg_test*
