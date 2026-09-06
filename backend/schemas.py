@@ -47,6 +47,24 @@ class ReportCreate(BaseModel):
 
 class ReportResponse(ReportCreate):
     id: int
+    image_path: Optional[str] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class AlertCreate(BaseModel):
+    location_id: int
+    title: str
+    message: str
+    risk_level: str = "LOW"
+    priority: str = "P3"
+    status: str = "ACTIVE"
+
+
+class AlertResponse(AlertCreate):
+    id: int
     created_at: datetime
 
     class Config:

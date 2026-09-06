@@ -8,6 +8,7 @@ class Location(Base):
     __tablename__ = "locations"
 
     id = Column(Integer, primary_key=True, index=True)
+
     name = Column(String, nullable=False)
     district = Column(String, nullable=False)
     state = Column(String, nullable=False)
@@ -46,5 +47,24 @@ class Report(Base):
     longitude = Column(Float, nullable=True)
 
     report_type = Column(String, default="LANDSLIDE")
+
+    image_path = Column(String, nullable=True)
+
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class Alert(Base):
+    __tablename__ = "alerts"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    location_id = Column(Integer, nullable=False)
+
+    title = Column(String, nullable=False)
+    message = Column(Text, nullable=False)
+
+    risk_level = Column(String, default="LOW")
+    priority = Column(String, default="P3")
+    status = Column(String, default="ACTIVE")
 
     created_at = Column(DateTime, default=datetime.utcnow)
