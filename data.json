@@ -1,0 +1,84 @@
+{
+  "locations": [
+    {
+      "location": "Tawang",
+      "state": "Arunachal Pradesh",
+      "risk_score": 82,
+      "population_factor": 80,
+      "infrastructure_factor": 90,
+      "connectivity_factor": 85
+    },
+    {
+      "location": "Bomdila",
+      "state": "Arunachal Pradesh",
+      "risk_score": 74,
+      "population_factor": 60,
+      "infrastructure_factor": 75,
+      "connectivity_factor": 80
+    },
+    {
+      "location": "Itanagar",
+      "state": "Arunachal Pradesh",
+      "risk_score": 68,
+      "population_factor": 90,
+      "infrastructure_factor": 85,
+      "connectivity_factor": 70
+    },
+    {
+      "location": "Aizawl",
+      "state": "Mizoram",
+      "risk_score": 86,
+      "population_factor": 85,
+      "infrastructure_factor": 80,
+      "connectivity_factor": 90
+    },
+    {
+      "location": "Churachandpur",
+      "state": "Manipur",
+      "risk_score": 79,
+      "population_factor": 70,
+      "infrastructure_factor": 65,
+      "connectivity_factor": 80
+    },
+    {
+      "location": "Kohima",
+      "state": "Nagaland",
+      "risk_score": 72,
+      "population_factor": 75,
+      "infrastructure_factor": 80,
+      "connectivity_factor": 75
+    },
+    {
+      "location": "Shillong",
+      "state": "Meghalaya",
+      "risk_score": 65,
+      "population_factor": 85,
+      "infrastructure_factor": 80,
+      "connectivity_factor": 70
+    },
+    {
+      "location": "Gangtok",
+      "state": "Sikkim",
+      "risk_score": 88,
+      "population_factor": 75,
+      "infrastructure_factor": 90,
+      "connectivity_factor": 85
+    },
+    {
+      "location": "Haflong",
+      "state": "Assam",
+      "risk_score": 76,
+      "population_factor": 55,
+      "infrastructure_factor": 65,
+      "connectivity_factor": 80
+    },
+    {
+      "location": "Agartala",
+      "state": "Tripura",
+      "risk_score": 45,
+      "population_factor": 80,
+      "infrastructure_factor": 70,
+      "connectivity_factor": 60
+    }
+  ]
+}
