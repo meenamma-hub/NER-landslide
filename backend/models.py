@@ -26,14 +26,36 @@ class RiskData(Base):
 
     location_id = Column(Integer, nullable=False)
 
+    # Environmental / ML inputs
     rainfall = Column(Float, default=0)
+    rainfall_7d = Column(Float, default=0)
     soil_moisture = Column(Float, default=0)
     slope = Column(Float, default=0)
     elevation = Column(Float, default=0)
+    historical_landslide_count = Column(Integer, default=0)
 
+    # ML output
     risk_score = Column(Float, default=0)
     risk_level = Column(String, default="LOW")
 
+    # Impact assessment
+    population_factor = Column(Float, default=0)
+    infrastructure_factor = Column(Float, default=0)
+    connectivity_factor = Column(Float, default=0)
+
+    population_affected = Column(Float, default=0)
+    connectivity_status = Column(
+        String,
+        default="Low connectivity risk"
+    )
+
+    # Emergency priority
+    priority_score = Column(Float, default=0)
+    priority = Column(String, default="P3")
+    recommended_action = Column(
+        String,
+        default="Continuous monitoring"
+    )
 
 class Report(Base):
     __tablename__ = "reports"
