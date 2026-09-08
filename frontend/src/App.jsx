@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Navbar from "./components/layout/Navbar";
 import Sidebar from "./components/layout/Sidebar";
@@ -16,11 +16,35 @@ import AlertsSMS from "./components/dashboard/AlertsSMS";
 import CriticalZones from "./components/dashboard/CriticalZones";
 import RainfallInput from "./components/dashboard/RainfallInput";
 import { dashboardData } from "./data/dashboardData";
+import { getRiskOverview } from "./services/riskService";
+import { getLocations } from "./services/locationsService";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activePage, setActivePage] = useState("Dashboard");
   const [demoData, setDemoData] = useState(dashboardData);
+  const [locations, setLocations] = useState([]);
+  const [riskOverview, setRiskOverview] = useState([]);
+  useEffect(() => {
+  getLocations()
+  .then((data) => {
+    console.log("Locations:", data);
+    setLocations(data);
+  })
+    .catch((error) => {
+      console.error("Failed to fetch locations:", error);
+    });
+
+  getRiskOverview()
+  .then((data) => {
+    console.log("Risk Overview:", data);
+    setRiskOverview(data);
+  })
+  .catch((error) => {
+    console.error("Failed to fetch risk overview:", error);
+  });
+}, []);
+
   const handleNavigation = (page) => {
     setActivePage(page);
     setSidebarOpen(false);
@@ -51,11 +75,9 @@ function App() {
             {activePage === "Dashboard" && (
               <>
                 <DashboardHeader />
-                <QuickStats onNavigate={handleNavigation} />
-                <MapSection riskLevel={demoData.riskLevel} />
-                <RainfallInput
-  rainfall={demoData.rainfall}
-  onRainfallChange={(value) =>
+                <QuickStats  onNavigate={handleNavigation}  riskOverview={riskOverview}/>
+                <MapSection  riskLevel={demoData.riskLevel}  locations={locations}/>
+                <RainfallInput  rainfall={demoData.rainfall}  onRainfallChange={(value) =>
     setDemoData((prev) => ({
       ...prev,
       rainfall: value,
@@ -85,7 +107,10 @@ function App() {
             {activePage === "Risk Map" && (
               <>
                 <DashboardHeader />
-                <MapSection riskLevel={demoData.riskLevel} />
+                <MapSection
+  riskLevel={demoData.riskLevel}
+  locations={locations}
+/>    
               </>
             )}
 

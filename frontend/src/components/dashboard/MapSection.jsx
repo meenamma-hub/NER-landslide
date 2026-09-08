@@ -1,6 +1,10 @@
 import { MapPinned } from "lucide-react";
 
-function MapSection({ riskLevel = "CRITICAL" }) {
+function MapSection({
+  riskLevel = "CRITICAL",
+  locations = [],
+  riskOverview = [],
+}) {
   return (
     <section className="mt-4 overflow-hidden rounded-2xl border border-[#1E3042] bg-[#07111D]">
       

@@ -33,9 +33,10 @@ def get_risk_overview(db: Session = Depends(get_db)):
             "longitude": location.longitude,
 
             "risk_score": risk.risk_score,
-            "risk_level": risk.risk_level,
+"risk_level": risk.risk_level,
+"rainfall": risk.rainfall,
 
-            "population_factor": risk.population_factor,
+"population_factor": risk.population_factor,
             "infrastructure_factor": risk.infrastructure_factor,
             "connectivity_factor": risk.connectivity_factor,
 
@@ -66,9 +67,6 @@ def get_risk(
     return risk
 
 
-@router.post("/predict")
-@router.post("/predict")
-@router.post("/predict")
 @router.post("/predict")
 def predict_landslide_risk(
     data: RiskPredictionRequest,

@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { locations } from "../../data/locations";
+import { useEffect, useState } from "react";
+import { getRiskOverview } from "../../services/riskService";
+
 import {
   AlertTriangle,
   MapPin,
@@ -8,30 +9,46 @@ import {
 
 import ZoneDetailsModal from "./ZoneDetailsModal";
 
-const zones = locations.map((item) => ({
+
+function CriticalZones() {
+  const [selectedZone, setSelectedZone] = useState(null);
+  const [zones, setZones] = useState([]);
+
+  useEffect(() => {
+    getRiskOverview()
+      .then((data) => {
+        console.log("Critical Zones:", data);
+
+const formattedZones = data.map((item) => ({
   name: item.location,
   state: item.state,
   score: item.risk_score,
-  rainfall: 124,
+  rainfall: item.rainfall,
+
   level:
-    item.risk_score >= 80
-      ? "Critical"
-      : item.risk_score >= 60
-      ? "High"
-      : item.risk_score >= 40
-      ? "Moderate"
-      : "Low",
+    item.risk_level.charAt(0) +
+    item.risk_level.slice(1).toLowerCase(),
+
+  priority: item.priority,
+  priorityScore: item.priority_score,
+
   levelClass:
-    item.risk_score >= 80
+    item.risk_level === "CRITICAL"
       ? "text-red-400 bg-red-500/10 border-red-500/20"
-      : item.risk_score >= 60
+      : item.risk_level === "HIGH"
       ? "text-orange-400 bg-orange-500/10 border-orange-500/20"
-      : item.risk_score >= 40
+      : item.risk_level === "MODERATE"
       ? "text-yellow-400 bg-yellow-500/10 border-yellow-500/20"
       : "text-green-400 bg-green-500/10 border-green-500/20",
 }));
-function CriticalZones() {
-  const [selectedZone, setSelectedZone] = useState(null);
+
+setZones(formattedZones);
+
+      })
+      .catch((error) => {
+        console.error("Failed to fetch critical zones:", error);
+      });
+  }, []);
   return (
     <section className="rounded-2xl border border-[#1E3042] bg-[#07111D] p-4 sm:p-5">
       {/* Header */}
@@ -52,8 +69,8 @@ function CriticalZones() {
         </div>
 
         <span className="rounded-full border border-red-500/20 bg-red-500/10 px-3 py-1 text-xs font-medium text-red-400">
-          4 LEVELS
-        </span>
+  {zones.filter((zone) => zone.level === "Critical").length} CRITICAL
+</span>
       </div>
 
       {/* Zone Cards */}

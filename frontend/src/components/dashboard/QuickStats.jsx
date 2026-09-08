@@ -1,7 +1,7 @@
 import { AlertTriangle, FileWarning } from "lucide-react";
 import QuickStatCard from "./QuickStatCard";
 
-function QuickStats({ onNavigate }) {
+function QuickStats({ onNavigate, riskOverview = [] }) {
   const handleCriticalZones = () => {
     onNavigate("Critical Zones");
   };
@@ -14,7 +14,7 @@ function QuickStats({ onNavigate }) {
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       <QuickStatCard
         title="Critical Zones"
-        subtitle="4 Risk Levels"
+        subtitle={`${riskOverview.filter((item) => item.risk_level === "CRITICAL").length} Critical Locations`}
         icon={<AlertTriangle size={25} />}
         iconClass="bg-red-500/10 text-red-400"
         cardClass="border-red-500/25 bg-gradient-to-r from-red-500/[0.08] to-[#0B1522]"

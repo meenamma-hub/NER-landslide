@@ -10,9 +10,7 @@ import {
 function ZoneDetailsModal({ zone, onClose }) {
   if (!zone) return null;
 
-  const priority =
-    zone.score >= 80 ? "P1" : zone.score >= 60 ? "P2" : "P3";
-
+  const priority = zone.priority;
   const priorityClass =
     priority === "P1"
       ? "text-red-400 bg-red-500/10 border-red-500/20"
@@ -40,9 +38,7 @@ function ZoneDetailsModal({ zone, onClose }) {
               <h2 className="text-lg font-semibold text-white">
                 {zone.name}
               </h2>
-              <p className="text-xs text-slate-500">
-                Aizawl, Mizoram
-              </p>
+              <p className="text-xs text-slate-500"> {zone.state}</p>
             </div>
           </div>
 
@@ -139,10 +135,10 @@ function ZoneDetailsModal({ zone, onClose }) {
             </div>
           </div>
 
-          {/* Demo note */}
-          <p className="text-center text-[11px] text-slate-600">
-            Demo data • Live environmental data will be integrated later
-          </p>
+          {/* Data source note */}
+<p className="text-center text-[11px] text-slate-600">
+  Live risk assessment • Data from backend
+</p>
         </div>
       </div>
     </div>
