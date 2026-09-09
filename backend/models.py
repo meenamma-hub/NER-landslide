@@ -90,3 +90,23 @@ class Alert(Base):
     status = Column(String, default="ACTIVE")
 
     created_at = Column(DateTime, default=datetime.utcnow)
+
+    
+class Hospital(Base):
+    __tablename__ = "hospitals"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    name = Column(String, nullable=False)
+    location = Column(String, nullable=False)
+
+    latitude = Column(Float, nullable=False)
+    longitude = Column(Float, nullable=False)
+
+    distance = Column(Float, default=0)
+    emergency_beds = Column(Integer, default=0)
+
+    status = Column(
+        String,
+        default="Available"
+    )

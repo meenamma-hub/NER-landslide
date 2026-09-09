@@ -73,7 +73,7 @@ def predict_landslide_risk(
     db: Session = Depends(get_db)
 ):
     try:
-        # 1. Run Aditi's ML model
+        # 1. Run ML prediction
         result = predict_risk(
             data.rainfall_24h_mm,
             data.rainfall_7d_mm,
@@ -82,11 +82,10 @@ def predict_landslide_risk(
             data.historical_landslide_count_5y
         )
 
-        # ML score: 0–1
-        # System score: 0–100
+        # ML score converted from 0–1 to 0–100
         risk_score_100 = result["risk_percentage"]
 
-        # 2. Get Aizawl's existing risk record
+        # 2. Get Aizawl's existing impact factors
         risk_data = (
             db.query(RiskData)
             .filter(RiskData.location_id == 4)
@@ -99,12 +98,11 @@ def predict_landslide_risk(
                 detail="Aizawl risk data not found"
             )
 
-        # 3. Get Aizawl impact factors
         population_factor = risk_data.population_factor
         infrastructure_factor = risk_data.infrastructure_factor
         connectivity_factor = risk_data.connectivity_factor
 
-        # 4. Calculate impact
+        # 3. Calculate impact
         from services.impact_service import calculate_impact
 
         impact = calculate_impact(
@@ -112,9 +110,11 @@ def predict_landslide_risk(
             connectivity_factor
         )
 
-        # 5. Calculate priority
-        from services.priority_service import calculate_priority
-        from services.priority_service import get_action
+        # 4. Calculate priority
+        from services.priority_service import (
+            calculate_priority,
+            get_action
+        )
 
         priority_score, priority = calculate_priority(
             risk_score_100,
@@ -125,46 +125,26 @@ def predict_landslide_risk(
 
         recommended_action = get_action(priority)
 
-        # 6. Update Aizawl's database record
-        risk_data.rainfall = data.rainfall_24h_mm
-        risk_data.rainfall_7d = data.rainfall_7d_mm
-        risk_data.elevation = data.elevation_m
-        risk_data.slope = data.slope_degrees
-        risk_data.historical_landslide_count = (
-            data.historical_landslide_count_5y
-        )
-
-        risk_data.risk_score = risk_score_100
-        risk_data.risk_level = result["risk_level"]
-
-        risk_data.population_affected = impact["population_affected"]
-        risk_data.connectivity_status = impact["connectivity_status"]
-
-        risk_data.priority_score = priority_score
-        risk_data.priority = priority
-        risk_data.recommended_action = recommended_action
-
-        db.commit()
-        db.refresh(risk_data)
-
-        # 7. Return updated result
+        # 5. Return prediction ONLY
+        # IMPORTANT:
+        # We do NOT update or commit the database here.
         return {
             "location": "Aizawl",
 
-            "risk_score": risk_data.risk_score,
+            "risk_score": risk_score_100,
             "ml_risk_score": result["risk_score"],
-            "risk_level": risk_data.risk_level,
+            "risk_level": result["risk_level"],
 
-            "population_factor": risk_data.population_factor,
-            "infrastructure_factor": risk_data.infrastructure_factor,
-            "connectivity_factor": risk_data.connectivity_factor,
+            "population_factor": population_factor,
+            "infrastructure_factor": infrastructure_factor,
+            "connectivity_factor": connectivity_factor,
 
-            "population_affected": risk_data.population_affected,
-            "connectivity_status": risk_data.connectivity_status,
+            "population_affected": impact["population_affected"],
+            "connectivity_status": impact["connectivity_status"],
 
-            "priority_score": risk_data.priority_score,
-            "priority": risk_data.priority,
-            "recommended_action": risk_data.recommended_action
+            "priority_score": priority_score,
+            "priority": priority,
+            "recommended_action": recommended_action
         }
 
     except ValueError as e:

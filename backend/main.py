@@ -11,6 +11,8 @@ from routers import locations
 from routers import risk
 from routers import reports
 from routers import alerts
+from routers import hospitals
+
 
 
 Base.metadata.create_all(bind=engine)
@@ -21,19 +23,27 @@ app = FastAPI(
     description="AI-Based Landslide Risk Monitoring System for North Eastern Region",
     version="1.0.0"
 )
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:5174",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
 
 app.include_router(locations.router)
 app.include_router(risk.router)
 app.include_router(reports.router)
 app.include_router(alerts.router)
+app.include_router(hospitals.router)
+
 
 @app.get("/")
 def root():

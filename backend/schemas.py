@@ -93,3 +93,23 @@ class AlertResponse(AlertCreate):
 
     class Config:
         from_attributes = True
+
+class HospitalCreate(BaseModel):
+    name: str
+    location: str
+
+    latitude: float
+    longitude: float
+
+    distance: float = 0
+    emergency_beds: int = 0
+
+    status: str = "Available"
+
+
+class HospitalResponse(HospitalCreate):
+    id: int
+
+    class Config:
+        from_attributes = True
+

@@ -10,7 +10,9 @@ import {
 function ZoneDetailsModal({ zone, onClose }) {
   if (!zone) return null;
 
-  const priority = zone.priority;
+  // Priority comes directly from backend
+  const priority = zone.priority || "N/A";
+
   const priorityClass =
     priority === "P1"
       ? "text-red-400 bg-red-500/10 border-red-500/20"
@@ -38,7 +40,12 @@ function ZoneDetailsModal({ zone, onClose }) {
               <h2 className="text-lg font-semibold text-white">
                 {zone.name}
               </h2>
-              <p className="text-xs text-slate-500"> {zone.state}</p>
+
+              <p className="text-xs text-slate-500">
+                {zone.district
+                  ? `${zone.district}, ${zone.state}`
+                  : zone.state}
+              </p>
             </div>
           </div>
 
@@ -58,13 +65,14 @@ function ZoneDetailsModal({ zone, onClose }) {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Activity size={18} className="text-red-400" />
+
                 <span className="text-sm text-slate-400">
                   Danger Score
                 </span>
               </div>
 
               <span className="text-2xl font-bold text-red-400">
-                {zone.score}
+                {zone.risk_score}
                 <span className="text-sm font-normal text-slate-600">
                   /100
                 </span>
@@ -74,39 +82,57 @@ function ZoneDetailsModal({ zone, onClose }) {
             <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#162333]">
               <div
                 className="h-full rounded-full bg-red-500"
-                style={{ width: `${zone.score}%` }}
+                style={{
+                  width: `${Math.min(
+                    Math.max(Number(zone.risk_score) || 0, 0),
+                    100
+                  )}%`,
+                }}
               />
             </div>
           </div>
 
           {/* Environmental data */}
           <div className="grid grid-cols-2 gap-3">
+
+            {/* Rainfall */}
             <div className="rounded-xl border border-[#1E3042] bg-[#0B1522] p-4">
               <div className="flex items-center gap-2">
                 <CloudRain size={17} className="text-blue-400" />
+
                 <span className="text-xs text-slate-500">
                   Rainfall
                 </span>
               </div>
 
               <p className="mt-2 text-xl font-bold text-white">
-                {zone.rainfall}
-                <span className="ml-1 text-xs font-normal text-slate-500">
-                  mm
-                </span>
+                {zone.rainfall ?? "N/A"}
+
+                {zone.rainfall !== undefined &&
+                  zone.rainfall !== null &&
+                  zone.rainfall !== "N/A" && (
+                    <span className="ml-1 text-xs font-normal text-slate-500">
+                      mm
+                    </span>
+                  )}
               </p>
             </div>
 
+            {/* Risk Level */}
             <div className="rounded-xl border border-[#1E3042] bg-[#0B1522] p-4">
               <div className="flex items-center gap-2">
-                <AlertTriangle size={17} className="text-orange-400" />
+                <AlertTriangle
+                  size={17}
+                  className="text-orange-400"
+                />
+
                 <span className="text-xs text-slate-500">
                   Risk Level
                 </span>
               </div>
 
               <p className="mt-2 text-lg font-bold uppercase text-red-400">
-                {zone.level}
+                {zone.risk_level || "Unknown"}
               </p>
             </div>
           </div>
@@ -115,12 +141,16 @@ function ZoneDetailsModal({ zone, onClose }) {
           <div className="rounded-xl border border-[#1E3042] bg-[#0B1522] p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <ShieldAlert size={20} className="text-violet-400" />
+                <ShieldAlert
+                  size={20}
+                  className="text-violet-400"
+                />
 
                 <div>
                   <p className="text-sm font-medium text-white">
                     Emergency Priority
                   </p>
+
                   <p className="text-xs text-slate-500">
                     Recommended response priority
                   </p>
@@ -135,10 +165,42 @@ function ZoneDetailsModal({ zone, onClose }) {
             </div>
           </div>
 
+          {/* Priority Score */}
+          {zone.priority_score !== undefined &&
+            zone.priority_score !== null && (
+              <div className="rounded-xl border border-[#1E3042] bg-[#0B1522] p-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-slate-400">
+                    Priority Score
+                  </span>
+
+                  <span className="text-lg font-bold text-white">
+                    {zone.priority_score}
+                    <span className="text-xs font-normal text-slate-600">
+                      /100
+                    </span>
+                  </span>
+                </div>
+              </div>
+            )}
+
+          {/* Recommended Action */}
+          {zone.recommended_action && (
+            <div className="rounded-xl border border-[#1E3042] bg-[#0B1522] p-4">
+              <p className="text-xs uppercase tracking-wider text-slate-500">
+                Recommended Action
+              </p>
+
+              <p className="mt-2 text-sm font-medium text-white">
+                {zone.recommended_action}
+              </p>
+            </div>
+          )}
+
           {/* Data source note */}
-<p className="text-center text-[11px] text-slate-600">
-  Live risk assessment • Data from backend
-</p>
+          <p className="text-center text-[11px] text-slate-600">
+            Live risk assessment • Data from backend
+          </p>
         </div>
       </div>
     </div>
