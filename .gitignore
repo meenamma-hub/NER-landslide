@@ -21,3 +21,14 @@ landslide.db
 
 # Logs
 *.log
+# Uploaded test reports
+backend/uploads/reports/
+
+# Recovery/backup files
+FOUND-App.jsx
+recovered-App.jsx
+recovered-check.jsx
+frontend/recovered-App.jsx
+frontend/src/App-backup.jsx
+tash show --stat stash@{1}
+tore --staged .
