@@ -1,23 +1,49 @@
+@"
 # Python virtual environment
 venv/
+.venv/
 
 # Python cache
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+.pytest_cache/
 
 # Environment variables
 .env
 
 # Local SQLite database
 landslide.db
+*.db
 
 # VS Code
 .vscode/
-
-# Python test/cache
-.pytest_cache/
+.vscode-test
 
 # Logs
 *.log
+
+# Vite files
+.vite/
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Node / package manager
+node_modules/
+.pnpm-store
+.pnp.*
+.yarn/*
+
+# Frontend build/cache
+.cache/
+.temp
+**/.vitepress/dist
+**/.vitepress/cache
+.docusaurus
+.vuepress/dist
+.svelte-kit/
+
+# Backend uploaded files
+backend/uploads/
+"@ | Set-Content .gitignore
